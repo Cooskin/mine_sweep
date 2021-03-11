@@ -9,8 +9,14 @@
   </view>
 
   <view class="game {{is_begin ? 'game_begin' : 'game_wait'}}">
-    <view class="btn_back" bindtap="cls_game">
+    <view class="btn_back" bindtap="cls_game" wx:if="{{is_begin}}">
       <image class="btn_bg" src="../../images/back.png"></image>
+    </view>
+    <view class="game_box">
+      <view class="time_box">时间：00:00:00</view>
+      <view class="dish">
+        <view class="item" wx:for="{{100}}">1</view>
+      </view>
     </view>
   </view>
   
