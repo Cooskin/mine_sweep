@@ -5,7 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    btnAry: ['简单', '一般', '困难'],
+    is_begin: false
   },
 
   /**
@@ -62,5 +63,26 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  /**
+   * jc
+  */
+
+  /**
+   * 开始游戏
+  */
+  begin (data) {
+    const _this = this
+    _this.setData({is_begin: true})
+    console.log(data.currentTarget.dataset.itme)
+  },
+  /**
+   * 返回
+  */
+  cls_game () {
+    const _this = this
+    _this.setData({is_begin: false})
+    console.log('返回')
   }
 })

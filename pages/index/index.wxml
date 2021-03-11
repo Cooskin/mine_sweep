@@ -5,13 +5,13 @@
 
   <!-- 按钮 -->
   <view class="wrap">
-    <button class="btn_item">简单</button>
-    <button class="btn_item">一般</button>
-    <button class="btn_item">困难</button>
+    <button class="btn_item" bindtap="begin" wx:for="{{btnAry}}" data-itme="{{item}}" wx:key="index">{{item}}</button>
   </view>
 
-  <view class="game">
-    
+  <view class="game {{is_begin ? 'game_begin' : 'game_wait'}}">
+    <view class="btn_back" bindtap="cls_game">
+      <image class="btn_bg" src="../../images/back.png"></image>
+    </view>
   </view>
   
 </view>
