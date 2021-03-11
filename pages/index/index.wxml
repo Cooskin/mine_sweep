@@ -1,0 +1,17 @@
+<!--pages/index.wxml-->
+<view class="index">
+  <!-- 背景图 -->
+  <image class="bg" src="../../images/bg.jpg"></image>
+
+  <!-- 按钮 -->
+  <view class="wrap">
+    <button class="btn_item">简单</button>
+    <button class="btn_item">一般</button>
+    <button class="btn_item">困难</button>
+  </view>
+
+  <view class="game">
+    
+  </view>
+  
+</view>
