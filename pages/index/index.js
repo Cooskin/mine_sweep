@@ -12,8 +12,9 @@ Page({
     refresh: false,   // 刷新
     mine_num: 10,     // 地雷数量
     time: {h: '00', m: '00', s: '00',}, // 时间
-    timer: null
-  },
+    timer: null,
+    stop: false,
+    },
 
   /**
    * 生命周期函数--监听页面加载
@@ -89,6 +90,7 @@ Page({
       for (let j = 0; j < 10; j++) {
         let obj = new Object({
           num: 0,
+          type: 0,
           is_tap: false,
           is_sign: false
         })
@@ -100,14 +102,17 @@ Page({
       gameAry: newAry,
       refresh: true,
       mine_num: 10,
+      stop: false,
       time: {
         h: '00',
         m: '00',
         s: '00'
       }
     })
-    console.log(_this.data)
+    _this.randomMine()
+    _this.mine()
     clearInterval(_this.data.timer)
+    _this.setData({timer: null})
     setTimeout(() => {
       _this.setData({refresh: false})
     },1000)
@@ -133,47 +138,67 @@ Page({
   */
   tap (data) {
     const _this = this
+    const gameAry = _this.data.gameAry
     const i = data.currentTarget.dataset.i
     const j = data.currentTarget.dataset.j
     const tapObj = `gameAry[${i}][${j}].is_tap`
     const signObj = `gameAry[${i}][${j}].is_sign`
+    // const type = `gameAry[${i}][${j}].type`
 
-    // 判断旗子的数量 插满十个旗子 结束游戏
-    if (_this.data.mine_num > 0) {
+    if (_this.data.stop) {
+      return
+    } else {
+      // 开始计时
+      if (!_this.data.timer) {
+        _this.setTime()
+      }
+    }
 
+    // gameAry[i][j].unm     
+
+    // 是否能 插旗子
+    if (_this.data.sign_tap) {
+      if (_this.data.mine_num) {
+        _this.setData({
+          sign_tap: !_this.data.sign_tap,
+          mine_num: _this.data.mine_num - 1
+        })
+      }
+
+      console.log(_this.data.mine_num)
+      gameAry[i][j].is_sign = !gameAry[i][j].is_sign
+      if (!_this.data.mine_num) {
+        wx.showToast({
+          title: '比心',
+          icon: 'none'
+        })
+        console.log('---------------------')
+      }
+
+    } else {
       if (_this.data.gameAry[i][j].is_sign) {
         _this.setData({
-          [tapObj]: !_this.data.gameAry[i][j].is_tap,
           [signObj]: !_this.data.gameAry[i][j].is_sign,
-          sign_tap: !_this.data.sign_tap
+          mine_num: _this.data.mine_num + 1
         })
         return
       }
       // 判断 是否可点击
       if (!_this.data.gameAry[i][j].is_tap) {
 
-        // 翻开 小方块
-        _this.setData({[tapObj]: !_this.data.gameAry[i][j].is_tap})
-        // 开始计时
-        if (!_this.data.timer) {
-          _this.setTime()
-        }
-        // 是否能 插旗子
-        if (_this.data.sign_tap) {
-          _this.setData({
-            sign_tap: !_this.data.sign_tap,
-            [signObj]: !_this.data.gameAry[i][j].is_sign,
-            mine_num: _this.data.mine_num - 1
-          })
+        if (_this.data.gameAry[i][j].num == 9) {
+          clearInterval(_this.data.timer)
+          _this.setData({stop: true})
+          gameAry[i][j].type = 1
+          
+        } else {
+          // 翻开 小方块
+          // _this.setData({[tapObj]: !_this.data.gameAry[i][j].is_tap})
+          gameAry[i][j].is_tap = !gameAry[i][j].is_tap
         }
       }
-    } else {
-      _this.setData({[signObj]: false})
-      wx.showToast({
-        title: '比心',
-        icon: 'none'
-      })
     }
+    _this.setData({gameAry: gameAry})
   },
   /**
    * 开启 标记
@@ -188,7 +213,6 @@ Page({
   */
   setTime () {
     const _this = this
-    console.log(_this.data.timer)
     let tiemr
 
     tiemr = setInterval(() => {
@@ -225,6 +249,61 @@ Page({
       })
     }, 1000)
     _this.setData({timer: tiemr})
+  },
+  /**
+   * 随机生成地雷坐标
+  */
+  randomMine () {
+    let position, mineArr, is_repetition,len
+    len = 1
+    mineArr = new Array()
+    for (let i = 0; i < len; i++) {
+
+      position = this.randomNumber()
+
+      if (mineArr.length) {
+        is_repetition = false
+        for (let j = 0; j < mineArr.length; j++) {
+          if (mineArr[i] == position) {
+            is_repetition = true
+          }
+        }
+      } else {
+        is_repetition = false
+      }
+      
+      if (!is_repetition) {
+
+        mineArr.push(position)
+
+        if (len < 10) {
+          len++
+        } else {
+          this.setData({mineArr: mineArr})
+        }
+      }
+    }
+  },
+  /**
+   * 生成随机数
+  */
+  randomNumber () {
+    let x,y
+    x = parseInt(Math.random(10) * 10)
+    y = parseInt(Math.random(10) * 10)
+    return [x,y]
+  },
+  /**
+   * 放置地雷
+  */
+  mine () {
+    let [gameAry, mineArr] = [this.data.gameAry, this.data.mineArr]
+
+    for (let i = 0; i < mineArr.length; i++) {
+      gameAry[mineArr[i][0]][mineArr[i][1]].num = 9
+    }
+    // console.log(gameAry)
+    this.setData({gameAry: gameAry})
   }
 })
 // jc 0

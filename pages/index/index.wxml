@@ -20,6 +20,7 @@
       <view class="dish" wx:if="{{is_begin}}" wx:for="{{gameAry}}" wx:for-index="i" wx:key="i">
         <view class="item {{item_i.is_tap ? 'tap' : ''}}" wx:for="{{item}}" bindtap="tap" wx:for-index="j" wx:for-item="item_i" data-i="{{i}}" data-j="{{j}}" wx:key="j">
           <image class="item_sign_bg" src="../../images/sign.png" wx:if="{{item_i.is_sign}}"></image>
+          <image class="item_sign_bg" src="../../images/over.jpg" wx:if="{{item_i.type == 1}}"></image>
         </view>
       </view>
       <view class="fun_box">
