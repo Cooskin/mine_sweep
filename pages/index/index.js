@@ -192,11 +192,14 @@ Page({
           // 翻开 小方块
           // _this.setData({[tapObj]: !_this.data.gameAry[i][j].is_tap})
           let count = _this.count(i, j)
-          if (count != 0) {
+          if (count) {
+            gameAry[i][j].is_tap = true
             gameAry[i][j].num = count
           } else {
-            // gameAry[i][j].is_tap = !gameAry[i][j].is_tap
-
+            _this.count(i+1, j)
+            _this.count(i-1, j)
+            _this.count(i, j-1)
+            _this.count(i, j+1)
           }
         }
       }
@@ -315,49 +318,112 @@ Page({
     const _this = this
     let gameAry = _this.data.gameAry
     let number = 0
-    console.log(gameAry[x + 1][y].num)
-    if (gameAry[x + 1][y].num == 9) {
-      number++
+    console.log(x,y)
+    // console.log(gameAry[x + 1][y])
+    if (x > 0) {
+      if (gameAry[x - 1][y].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x - 1][y].num == 9) {
-      number++
+    if (x < 9) {
+      if (gameAry[x + 1][y].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x][y + 1].num == 9) {
-      number++
+    if (y < 9) {
+      if (gameAry[x][y + 1].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x][y - 1].num == 9) {
-      number++
+    if (y > 0) {
+      if (gameAry[x][y - 1].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x + 1][y + 1].num == 9) {
-      number++
+    if (x > 0 && y < 9) {
+      if (gameAry[x - 1][y + 1].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x + 1][y - 1].num == 9) {
-      number++
+    if (x < 9 && y < 9) {
+      if (gameAry[x + 1][y + 1].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x - 1][y + 1].num == 9) {
-      number++
+    if (x < 9 && y > 0) {
+      if (gameAry[x + 1][y - 1].num == 9) {
+        number++
+      }
     }
-    if (gameAry[x - 1][y - 1].num == 9) {
-      number++
+    if (x > 0 && y > 0) {
+      if (gameAry[x - 1][y - 1].num == 9) {
+        number++
+      }
     }
-    console.log(number)
+    
+
+    
+    // console.log(number)
     if (!number) {
       gameAry[x][y].is_tap = true
-      gameAry[x + 1][y].is_tap = true
-      gameAry[x - 1][y].is_tap = true
-      gameAry[x][y + 1].is_tap = true
-      gameAry[x][y - 1].is_tap = true
-      gameAry[x + 1][y + 1].is_tap = true
-      gameAry[x + 1][y - 1].is_tap = true
-      gameAry[x - 1][y + 1].is_tap = true
-      gameAry[x - 1][y - 1].is_tap = true
-      // _this.count()
-    } else {
+      if (x < 9) {
+        if (gameAry[x + 1][y]) {
+          gameAry[x + 1][y].is_tap = true
+          // _this.count(x+1,y)
+        }
+      }
+      if (x > 0) {
+        if (gameAry[x - 1][y]) {
+          gameAry[x - 1][y].is_tap = true
+          // _this.count(x-1,y)
+        }
+      }
+      if (y < 9) {
+        if (gameAry[x][y + 1]) {
+          gameAry[x][y + 1].is_tap = true
+        }
+      }
+      if (y > 0) {
+        if (gameAry[x][y - 1]) {
+          gameAry[x][y - 1].is_tap = true
+        }
+      }
+      if (x < 9 && y < 9) {
+        if (gameAry[x + 1][y + 1]) {
+          gameAry[x + 1][y + 1].is_tap = true
+        }
+      }
+      if (x < 9 && y > 0 ) {
+        if (gameAry[x + 1][y - 1]) {
+          gameAry[x + 1][y - 1].is_tap = true
+        }
+      }
+      if (x > 0 && y < 9) {
+        if (gameAry[x - 1][y + 1]) {
+          gameAry[x - 1][y + 1].is_tap = true
+        }
+      }
+      if (x > 0 && y > 0) {
+        if (gameAry[x - 1][y - 1]) {
+          gameAry[x - 1][y - 1].is_tap = true
+        }
+      }
+      
+      
+      // _this.count(x+1,y)
+      // _this.count(x-1,y)
+      // _this.count(x,y+1)
+      // _this.count(x,y-1)
+      // _this.count(x+1,y+1)
+      // _this.count(x+1,y-1)
+      // _this.count(x-1,y+1)
+      // _this.count(x-1,y-1)
+      _this.setData({gameAry: gameAry})
 
+    } else {
+      return number
     }
-    _this.setData({gameAry: gameAry})
     // console.log(number)
-    return number
   }
 
 })
