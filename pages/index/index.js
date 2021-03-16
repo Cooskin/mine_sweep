@@ -154,8 +154,6 @@ Page({
       }
     }
 
-    // gameAry[i][j].unm     
-
     // 是否能 插旗子
     if (_this.data.sign_tap) {
       if (_this.data.mine_num) {
@@ -165,7 +163,7 @@ Page({
         })
       }
 
-      console.log(_this.data.mine_num)
+      // console.log(_this.data.mine_num)
       gameAry[i][j].is_sign = !gameAry[i][j].is_sign
       if (!_this.data.mine_num) {
         wx.showToast({
@@ -185,16 +183,21 @@ Page({
       }
       // 判断 是否可点击
       if (!_this.data.gameAry[i][j].is_tap) {
-
         if (_this.data.gameAry[i][j].num == 9) {
           clearInterval(_this.data.timer)
-          _this.setData({stop: true})
+          // _this.setData({stop: true})
           gameAry[i][j].type = 1
           
         } else {
           // 翻开 小方块
           // _this.setData({[tapObj]: !_this.data.gameAry[i][j].is_tap})
-          gameAry[i][j].is_tap = !gameAry[i][j].is_tap
+          let count = _this.count(i, j)
+          if (count != 0) {
+            gameAry[i][j].num = count
+          } else {
+            // gameAry[i][j].is_tap = !gameAry[i][j].is_tap
+
+          }
         }
       }
     }
@@ -304,6 +307,58 @@ Page({
     }
     // console.log(gameAry)
     this.setData({gameAry: gameAry})
+  },
+  /**
+   * 计算数字
+  */
+  count (x,y) {
+    const _this = this
+    let gameAry = _this.data.gameAry
+    let number = 0
+    console.log(gameAry[x + 1][y].num)
+    if (gameAry[x + 1][y].num == 9) {
+      number++
+    }
+    if (gameAry[x - 1][y].num == 9) {
+      number++
+    }
+    if (gameAry[x][y + 1].num == 9) {
+      number++
+    }
+    if (gameAry[x][y - 1].num == 9) {
+      number++
+    }
+    if (gameAry[x + 1][y + 1].num == 9) {
+      number++
+    }
+    if (gameAry[x + 1][y - 1].num == 9) {
+      number++
+    }
+    if (gameAry[x - 1][y + 1].num == 9) {
+      number++
+    }
+    if (gameAry[x - 1][y - 1].num == 9) {
+      number++
+    }
+    console.log(number)
+    if (!number) {
+      gameAry[x][y].is_tap = true
+      gameAry[x + 1][y].is_tap = true
+      gameAry[x - 1][y].is_tap = true
+      gameAry[x][y + 1].is_tap = true
+      gameAry[x][y - 1].is_tap = true
+      gameAry[x + 1][y + 1].is_tap = true
+      gameAry[x + 1][y - 1].is_tap = true
+      gameAry[x - 1][y + 1].is_tap = true
+      gameAry[x - 1][y - 1].is_tap = true
+      // _this.count()
+    } else {
+
+    }
+    _this.setData({gameAry: gameAry})
+    // console.log(number)
+    return number
   }
+
 })
 // jc 0
